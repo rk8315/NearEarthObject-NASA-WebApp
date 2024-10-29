@@ -1,0 +1,36 @@
+﻿@model List<NearEarthObject>
+
+<h2>Near Earth Objects</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Diameter (meters)</th>
+                <th>Miss Distance (km)</th>
+                <th>Velocity (km/h)</th>
+                <th>Hazardous</th>
+                <th>Orbiting Body</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var neo in Model)
+            {
+                <tr>
+                    <td>@neo.Name</td>
+                    <td>@neo.EstimatedDiameterMeters</td>
+                    <td>@neo.MissDistanceKm</td>
+                    <td>@neo.VelocityKmPerHour</td>
+                    <td>@(neo.IsPotentiallyDangerous ? "Yes" : "No")</td>
+                    <td>@neo.OrbitingBody</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No data available</p>
+}

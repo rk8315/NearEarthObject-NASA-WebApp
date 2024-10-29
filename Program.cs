@@ -1,3 +1,5 @@
+using NearEarthObject_WebApp.Services;
+
 namespace NearEarthObject_WebApp
 {
     public class Program
@@ -6,8 +8,17 @@ namespace NearEarthObject_WebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Configurations
+            builder.Configuration.AddEnvironmentVariables();
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<NeoApiService>();
+
+            // Logging
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+            builder.Logging.AddDebug();
 
             var app = builder.Build();
 
