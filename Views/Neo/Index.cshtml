@@ -1,36 +1,60 @@
 ﻿@model List<NearEarthObject>
+@{
+    ViewData["Title"] = "Near Earth Objects";
+}
 
 <h2>Near Earth Objects</h2>
 
-@if (Model != null && Model.Any())
+@if(TempData["DateError"] != null)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Diameter (meters)</th>
-                <th>Miss Distance (km)</th>
-                <th>Velocity (km/h)</th>
-                <th>Hazardous</th>
-                <th>Orbiting Body</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var neo in Model)
-            {
+    <div style="color:red;">
+        @TempData["DateError"]
+    </div>
+}
+
+<form method="post" asp-controller="Neo" asp-action="FetchData">
+    <div>
+        <label for="startDate">Start Date: </label>
+        <input type="date" id="startDate" name="startDate" required />
+    </div>
+    <div>
+        <label for="endDate">End Date: </label>
+        <input type="date" id="endDate" name="endDate" required />
+    </div>
+    <button type="submit">Fetch Data</button>
+</form> 
+
+<div id="neoResults">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@neo.Name</td>
-                    <td>@neo.EstimatedDiameterMeters</td>
-                    <td>@neo.MissDistanceKm</td>
-                    <td>@neo.VelocityKmPerHour</td>
-                    <td>@(neo.IsPotentiallyDangerous ? "Yes" : "No")</td>
-                    <td>@neo.OrbitingBody</td>
+                    <th>Name</th>
+                    <th>Diameter (meters)</th>
+                    <th>Miss Distance (km)</th>
+                    <th>Velocity (km/h)</th>
+                    <th>Hazardous</th>
+                    <th>Orbiting Body</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No data available</p>
-}
+            </thead>
+            <tbody>
+                @foreach (var neo in Model)
+                {
+                    <tr>
+                        <td>@neo.Name</td>
+                        <td>@neo.EstimatedDiameterMeters</td>
+                        <td>@neo.MissDistanceKm</td>
+                        <td>@neo.VelocityKmPerHour</td>
+                        <td>@(neo.IsPotentiallyDangerous ? "Yes" : "No")</td>
+                        <td>@neo.OrbitingBody</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No data available</p>
+    }
+</div>

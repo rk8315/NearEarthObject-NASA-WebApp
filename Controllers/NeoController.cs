@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NearEarthObject_WebApp.Models;
 using NearEarthObject_WebApp.Services;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace NearEarthObject_WebApp.Controllers
 {
-    [ApiController]
+    [Route("Neo")]
     public class NeoController : Controller
     {
         private readonly NeoApiService _neoApiService;
@@ -18,18 +16,26 @@ namespace NearEarthObject_WebApp.Controllers
             _logger = logger;
         }
 
-        [Route("Neo")]
-        public async Task<IActionResult> Index(string startDate="2015-09-07", string endDate = "2015-09-08")
+        [HttpGet]
+        public IActionResult Index()
         {
-            try
+            return View(new List<NearEarthObject>());
+        }
+
+        [HttpPost]
+        [Route("NeoData")]
+        public async Task<IActionResult> FetchData(DateTime startDate, DateTime endDate)
+        {
+            if((endDate - startDate).TotalDays > 7 || (endDate - startDate).TotalDays < 0)
             {
-                var neos = await _neoApiService.FetchNeoDataAsync(startDate, endDate);
-                return View(neos);
+                //ModelState.AddModelError("DateError", "Dates must be within 7 days of eachother.");
+                //return View("Index", new List<NearEarthObject>());
+                TempData["DateError"] = "Dates must be within 7 days of each other and in the correct order.";
+                return RedirectToAction("Index"); // Redirect back to Index to show the error
             }
-            catch (Exception ex)
-            {
-                return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier, Message = ex.Message });
-            }
+
+            var neos = await _neoApiService.FetchNeoDataAsync(startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
+            return View("Index", neos);
         }
     }
 }
