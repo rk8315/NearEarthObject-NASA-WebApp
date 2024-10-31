@@ -12,5 +12,6 @@
         public bool IsPotentiallyDangerous { get; set; }
         public bool IsSentryObject { get; set; }
         public string OrbitingBody { get; set; }
+        public string NasaJplUrl { get; set; }
     }
 }

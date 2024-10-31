@@ -41,7 +41,8 @@ namespace NearEarthObject_WebApp.Services
                             VelocityMiPerHour = (double)neo["close_approach_data"][0]["relative_velocity"]["miles_per_hour"],
                             IsPotentiallyDangerous = (bool)neo["is_potentially_hazardous_asteroid"],
                             IsSentryObject = (bool)neo["is_sentry_object"],
-                            OrbitingBody = (string)neo["close_approach_data"][0]["orbiting_body"]
+                            OrbitingBody = (string)neo["close_approach_data"][0]["orbiting_body"],
+                            NasaJplUrl = (string)neo["nasa_jpl_url"]
                         });
                     }
                 }

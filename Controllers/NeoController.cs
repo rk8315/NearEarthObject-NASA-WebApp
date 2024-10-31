@@ -28,10 +28,8 @@ namespace NearEarthObject_WebApp.Controllers
         {
             if((endDate - startDate).TotalDays > 7 || (endDate - startDate).TotalDays < 0)
             {
-                //ModelState.AddModelError("DateError", "Dates must be within 7 days of eachother.");
-                //return View("Index", new List<NearEarthObject>());
                 TempData["DateError"] = "Dates must be within 7 days of each other and in the correct order.";
-                return RedirectToAction("Index"); // Redirect back to Index to show the error
+                return RedirectToAction("Index"); 
             }
 
             var neos = await _neoApiService.FetchNeoDataAsync(startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));

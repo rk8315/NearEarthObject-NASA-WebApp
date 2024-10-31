@@ -3,6 +3,16 @@
     ViewData["Title"] = "Near Earth Objects";
 }
 
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<style>
+    #milkyway {
+        border: 1px solid #ccc;
+    }
+</style>
+
+
+
 <h2>Near Earth Objects</h2>
 
 @if(TempData["DateError"] != null)
@@ -24,6 +34,10 @@
     <button type="submit">Fetch Data</button>
 </form> 
 
+<svg id="milkyway" width="800" height="600"></svg>
+
+
+
 <div id="neoResults">
     @if (Model != null && Model.Any())
     {
@@ -36,6 +50,7 @@
                     <th>Velocity (km/h)</th>
                     <th>Hazardous</th>
                     <th>Orbiting Body</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -48,6 +63,7 @@
                         <td>@neo.VelocityKmPerHour</td>
                         <td>@(neo.IsPotentiallyDangerous ? "Yes" : "No")</td>
                         <td>@neo.OrbitingBody</td>
+                        <td><a href="@neo.NasaJplUrl">More Info</a></td>
                     </tr>
                 }
             </tbody>
@@ -58,3 +74,67 @@
         <p>No data available</p>
     }
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Define planets data
+        const planets = [
+           // { name: "Mercury", radius: 3, color: "gray", distance: 60 },
+           // { name: "Venus", radius: 6, color: "yellow", distance: 110 },
+           { name: "Earth", radius: 6, color: "blue", distance: 150 },
+           // { name: "Mars", radius: 4, color: "red", distance: 230 }
+        ];
+
+        // Add data dynamically from Model to JavaScript
+        const neos = [
+    @foreach (var neo in Model)
+    {
+        @:{ name: "@neo.Name", distance: @neo.MissDistanceKm / 1000, size: 2 },
+    }
+            ];
+
+        // set up zoom and panning
+        const svg = d3.select("#milkyway")
+            .attr("viewBox", "0 0 800 600") // ViewBox for zoom/pan effect
+            .append("g"); // Add group to transform on zoom
+
+        // Draw planets
+        svg.selectAll("circle.planet")
+            .data(planets)
+            .enter()
+            .append("circle")
+            .attr("class", "planet")
+            .attr("cx", d => d.distance) // Adjust as needed for your visualization
+            .attr("cy", 300) // Y position in the center
+            .attr("r", d => d.radius)
+            .attr("fill", d => d.color)
+            .on("click", (event, d) => {
+                alert(`You clicked on planet: ${d.name}`);
+            });
+
+        // Draw NEOs
+        svg.selectAll("circle.neo")
+            .data(neos)
+            .enter()
+            .append("circle")
+            .attr("class", "neo")
+            .attr("cx", d => d.distance) // Adjust for NEO distances
+            .attr("cy", 300) // Centered vertically
+            .attr("r", d => d.size) 
+            .attr("fill", "orange")
+            .on("click", (event, d) => {
+                alert(`You clicked on NEO: ${d.name}`);
+            });
+
+        // Zoom behavior
+        const zoom = d3.zoom()
+            .scaleExtent([1, 10]) // Set zoom limits
+            .on("zoom", (event) => {
+                svg.attr("transform", event.transform); // Apply zoom
+            });
+
+        // Apply zoom 
+        d3.select("#milkyway").call(zoom);
+    });
+
+</script>
