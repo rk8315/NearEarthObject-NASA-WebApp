@@ -11,8 +11,6 @@
     }
 </style>
 
-
-
 <h2>Near Earth Objects</h2>
 
 @if(TempData["DateError"] != null)
@@ -36,8 +34,6 @@
 
 <svg id="milkyway" width="800" height="600"></svg>
 
-
-
 <div id="neoResults">
     @if (Model != null && Model.Any())
     {
@@ -49,7 +45,6 @@
                     <th>Miss Distance (km)</th>
                     <th>Velocity (km/h)</th>
                     <th>Hazardous</th>
-                    <th>Orbiting Body</th>
                     <th></th>
                 </tr>
             </thead>
@@ -62,7 +57,6 @@
                         <td>@neo.MissDistanceKm</td>
                         <td>@neo.VelocityKmPerHour</td>
                         <td>@(neo.IsPotentiallyDangerous ? "Yes" : "No")</td>
-                        <td>@neo.OrbitingBody</td>
                         <td><a href="@neo.NasaJplUrl">More Info</a></td>
                     </tr>
                 }
@@ -79,10 +73,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         // Define planets data
         const planets = [
-           // { name: "Mercury", radius: 3, color: "gray", distance: 60 },
-           // { name: "Venus", radius: 6, color: "yellow", distance: 110 },
            { name: "Earth", radius: 6, color: "blue", distance: 150 },
-           // { name: "Mars", radius: 4, color: "red", distance: 230 }
         ];
 
         // Add data dynamically from Model to JavaScript

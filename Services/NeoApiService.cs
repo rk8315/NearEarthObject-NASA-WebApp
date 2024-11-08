@@ -33,12 +33,12 @@ namespace NearEarthObject_WebApp.Services
                         neos.Add(new NearEarthObject
                         {
                             Name = (string)neo["name"],
-                            EstimatedDiameterMeters = ((double)neo["estimated_diameter"]["meters"]["estimated_diameter_min"] + (double)neo["estimated_diameter"]["meters"]["estimated_diameter_max"]) / 2.0,
-                            EstimatedDiameterFeet = ((double)neo["estimated_diameter"]["feet"]["estimated_diameter_min"] + (double)neo["estimated_diameter"]["feet"]["estimated_diameter_max"]) / 2.0,
-                            MissDistanceKm = (double)neo["close_approach_data"][0]["miss_distance"]["kilometers"],
-                            MissDistanceMi = (double)neo["close_approach_data"][0]["miss_distance"]["miles"],
-                            VelocityKmPerHour = (double)neo["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"],
-                            VelocityMiPerHour = (double)neo["close_approach_data"][0]["relative_velocity"]["miles_per_hour"],
+                            EstimatedDiameterMeters = double.Round(((double)neo["estimated_diameter"]["meters"]["estimated_diameter_min"] + (double)neo["estimated_diameter"]["meters"]["estimated_diameter_max"]) / 2.0, 2),
+                            EstimatedDiameterFeet = double.Round(((double)neo["estimated_diameter"]["feet"]["estimated_diameter_min"] + (double)neo["estimated_diameter"]["feet"]["estimated_diameter_max"]) / 2.0, 2),
+                            MissDistanceKm = double.Round((double)neo["close_approach_data"][0]["miss_distance"]["kilometers"], 2),
+                            MissDistanceMi = double.Round((double)neo["close_approach_data"][0]["miss_distance"]["miles"], 2),
+                            VelocityKmPerHour = double.Round((double)neo["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"], 2),
+                            VelocityMiPerHour = double.Round((double)neo["close_approach_data"][0]["relative_velocity"]["miles_per_hour"], 2),
                             IsPotentiallyDangerous = (bool)neo["is_potentially_hazardous_asteroid"],
                             IsSentryObject = (bool)neo["is_sentry_object"],
                             OrbitingBody = (string)neo["close_approach_data"][0]["orbiting_body"],
